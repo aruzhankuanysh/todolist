@@ -1,25 +1,14 @@
-import logo from './logo.svg';
+// App;
+import { useSelector } from 'react-redux';
 import './App.css';
+import AppRouter from './components/navigation/AppRouter';
 
-function App() {
+export default function App() {
+  const isDark = useSelector((state) => state.theme.isDark);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={isDark ? 'darktheme' : 'lighttheme'}>
+      <AppRouter />
     </div>
   );
 }
-
-export default App;
