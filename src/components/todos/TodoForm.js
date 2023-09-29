@@ -1,14 +1,16 @@
 // TodoForm.js
-
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addTodo } from '../../actions/todoActions';
 
-function TodoForm({ addTodo }) {
+function TodoForm() {
+  const dispatch = useDispatch();
   const [todoTitle, setTodoTitle] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (todoTitle.trim() !== '') {
-      addTodo(todoTitle);
+      dispatch(addTodo({ text: todoTitle, completed: false }));
       setTodoTitle('');
     }
   };
@@ -27,3 +29,4 @@ function TodoForm({ addTodo }) {
 }
 
 export default TodoForm;
+

@@ -1,28 +1,70 @@
+//TodoList
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { editTodo, removeTodo, toggleTodo } from '../../actions/todoActions';
 
 function TodoList() {
-  const [todos, setTodos] = useState([]);
+  const dispatch = useDispatch();
+  const todos = useSelector((state) => state.todos); // Получение списка задач из Redux-хранилища
+    console.log('1',todos)
+  const [editingTodo, setEditingTodo] = useState(null); // Состояние для отслеживания редактируемой задачи
+  const [editedText, setEditedText] = useState('');
 
-  useEffect(() => {
-    const loadTodo = async () => {
-      try {
-        const response = await axios.get('https://jsonplaceholder.typicode.com/todos');
-        setTodos(response.data);
-      } catch (error) {
-        console.error('Ошибка при загрузке задач:', error);
-      }
-    };
+  const handleEdit = (todo) => {
+    setEditingTodo(todo);
+    setEditedText(todo.text);
+  };
 
-    loadTodo(); // Вызов функции загрузки при монтировании компонента
-  }, []);
+  const handleSaveEdit = () => {
+    if (editedText.trim() !== '') {
+      dispatch(editTodo({ ...editingTodo, text: editedText }));
+      setEditingTodo(null);
+      setEditedText('');
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingTodo(null);
+    setEditedText('');
+  };
+
+  const handleDelete = (todoId) => {
+    dispatch(removeTodo(todoId));
+  };
+
+  const handleToggle = (todoId) => {
+    dispatch(toggleTodo(todoId));
+  };
 
   return (
     <div>
       <h1>Список задач</h1>
       <ul>
         {todos.map((todo) => (
-          <li key={todo.id}>{todo.title}</li>
+          <li key={todo.id}>
+            {editingTodo === todo ? (
+              <>
+                <input
+                  type="text"
+                  value={editedText}
+                  onChange={(e) => setEditedText(e.target.value)}
+                />
+                <button onClick={handleSaveEdit}>Сохранить</button>
+                <button onClick={handleCancelEdit}>Отмена</button>
+              </>
+            ) : (
+              <>
+                <span
+                  className={todo.completed ? 'completed' : ''}
+                  onClick={() => handleToggle(todo.id)}
+                >
+                  {todo.text}
+                </span>
+                <button onClick={() => handleEdit(todo)}>Редактировать</button>
+                <button onClick={() => handleDelete(todo.id)}>Удалить</button>
+              </>
+            )}
+          </li>
         ))}
       </ul>
     </div>
@@ -30,3 +72,4 @@ function TodoList() {
 }
 
 export default TodoList;
+
