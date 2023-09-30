@@ -1,5 +1,5 @@
 // store.js
-import { createStore, combineReducers } from 'redux';
+import { combineReducers } from 'redux';
 import { themeReducer } from './reducers/themeReducer';
 import { todoReducer } from './reducers/todoReducer';
 
@@ -8,6 +8,4 @@ const rootReducer = combineReducers({
   todoReducer: todoReducer,
 });
 
-const store = createStore(rootReducer);
-
-export default store;
+export default rootReducer;

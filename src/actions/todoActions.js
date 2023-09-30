@@ -1,56 +1,100 @@
-//toodoActions
-import axios from "axios"
+// todoActions.js
+import axios from 'axios';
 
-export const makeRequest = () => {
-  return {
-    type: "MAKE_REQUEST",
-  };
-};
-export const failRequest = (err) => {
-  return {
-    type: "FAIL_REQUEST",
-    payload: err,
-  };
-};
+const apiUrl = 'http://localhost:3001';
 
-export const getTodo = (todo) => ({
-  type: "GET_TODO",
-  payload: todo,
-});
-
-export const addTodo = (todo) => ({
-  type: "ADD_TODO",
-  payload: todo,
-});
-
-export const editTodo = (updatedTodo) => ({
-  type: "EDIT_TODO",
-  payload: updatedTodo,
-});
-
-export const removeTodo = (todoId) => ({
-  type: "REMOVE_TODO",
-  payload: todoId,
-});
-
-export const toggleTodo = (todoId) => ({
-  type: "TOGGLE_TODO",
-  payload: todoId,
-});
-
-export const FetchTodoList = () => {
-  return (dispatch) => {
-    dispatch(makeRequest());
-    //setTimeout(() => {
-    axios
-      .get("https://my-json-server.typicode.com/aruzhankuanysh/todos/todos")
-      .then((res) => {
-        const todolist = res.data;
-        dispatch(getTodo(todolist));
-      })
-      .catch((err) => {
-        dispatch(failRequest(err.message));
+export const getTodo = () => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(`${apiUrl}/todos`);
+      const todos = response.data;
+      dispatch({
+        type: 'GET_TODO',
+        payload: todos,
       });
-    // }, 2000);
+    } catch (error) {
+      dispatch({
+        type: 'FAIL_REQUEST',
+        payload: error.message,
+      });
+    }
+  };
+};
+
+export const addTodo = (todo) => {
+  return async (dispatch) => {
+    try {
+      await axios.post(`${apiUrl}/todos`, todo);
+      dispatch({
+        type: 'ADD_TODO',
+        payload: todo,
+      });
+    } catch (error) {
+      dispatch({
+        type: 'FAIL_REQUEST',
+        payload: error.message,
+      });
+    }
+  };
+};
+
+export const editTodo = (updatedTodo) => {
+  return async (dispatch) => {
+    try {
+      await axios.put(`${apiUrl}/todos/${updatedTodo.id}`, updatedTodo);
+      dispatch({
+        type: 'EDIT_TODO',
+        payload: updatedTodo,
+      });
+    } catch (error) {
+      dispatch({
+        type: 'FAIL_REQUEST',
+        payload: error.message,
+      });
+    }
+  };
+};
+
+export const removeTodo = (todoId) => {
+  return async (dispatch) => {
+    try {
+      await axios.delete(`${apiUrl}/todos/${todoId}`);
+      dispatch({
+        type: 'REMOVE_TODO',
+        payload: todoId,
+      });
+    } catch (error) {
+      dispatch({
+        type: 'FAIL_REQUEST',
+        payload: error.message,
+      });
+    }
+  };
+};
+
+export const toggleTodo = (todoId) => {
+  return async (dispatch, getState) => {
+    try {
+      const state = getState();
+      const todo = state.todoReducer.todos.find((t) => t.id === todoId);
+
+      if (!todo) {
+        throw new Error('Todo not found');
+      }
+
+      const updatedTodo = { ...todo, completed: !todo.completed };
+
+      await axios.put(`${apiUrl}/todos/${todoId}`, updatedTodo);
+
+      dispatch({
+        type: 'TOGGLE_TODO',
+        payload: todoId,
+      });
+    } catch (error) {
+      dispatch({
+        type: 'FAIL_REQUEST',
+        payload: error.message,
+      });
+    }
   };
 };

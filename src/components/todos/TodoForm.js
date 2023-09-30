@@ -18,10 +18,12 @@ function TodoForm() {
   const handleAddTodo = (e) => {
     e.preventDefault();
     if(todoTitle){
+      console.log("date", Date.now())
       const newTodo = {
         id: Date.now(),
         title: todoTitle,
         completed: false,
+        createdAt: Date.now()
       };
   
       dispatch(addTodo(newTodo));

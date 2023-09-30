@@ -13,7 +13,7 @@ export const todoReducer = (state = initialState, action) => {
     case "ADD_TODO":
       const newTodo = {
         ...action.payload,
-        createdAt: new Date(), // Добавляем текущую дату и время
+        createdAt: new Date(),
       };
       return {
         ...state,
@@ -24,7 +24,7 @@ export const todoReducer = (state = initialState, action) => {
         ...state,
         todos: state.todos.map((todo) =>
           todo.id === action.payload.id
-            ? { ...action.payload, createdAt: todo.createdAt } // Сохраняем старую дату создания
+            ? { ...action.payload, createdAt: todo.createdAt }
             : todo
         ),
       };

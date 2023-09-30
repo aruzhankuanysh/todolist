@@ -1,0 +1,28 @@
+{
+  "todos": [
+    {
+      "id": 1546546462465,
+      "title": "Полить цветы",
+      "completed": false,
+      "createdAt": "2023-09-29T12:00:00Z"
+    },
+    {
+      "id": 1696106574664,
+      "title": "выполнить тестовое задание",
+      "completed": true,
+      "createdAt": 1696106574664
+    },
+    {
+      "id": 1696106585180,
+      "title": "Тренировка 2 часа",
+      "completed": false,
+      "createdAt": 1696106585180
+    },
+    {
+      "id": 1696106608183,
+      "title": "изучить MaterialUI",
+      "completed": true,
+      "createdAt": 1696106608183
+    }
+  ]
+}

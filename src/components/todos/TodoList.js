@@ -1,7 +1,7 @@
 //TodoList
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { editTodo, removeTodo, toggleTodo } from "../../actions/todoActions";
+import { editTodo, getTodo, removeTodo, toggleTodo } from "../../actions/todoActions";
 import {
   Button,
   ButtonGroup,
@@ -31,6 +31,10 @@ function TodoList() {
   const toggleSortOrder = () => {
     setSortOrder(sortOrder === "desc" ? "asc" : "desc");
   };
+
+  useEffect(() => {
+    dispatch(getTodo());
+  }, [dispatch]);
 
   const sortByCriteria = (a, b) => {
     if (sortBy === "date") {
@@ -89,14 +93,14 @@ function TodoList() {
   return (
     <>
       <Grid container direction="row" justifyContent="space-between">
-        <Grid xs={7}>
+        <Grid item xs={7}>
           <ButtonGroup variant="outlined" aria-label="outlined button group">
             <Button onClick={() => setFilter("all")}>все</Button>
             <Button onClick={() => setFilter("completed")}>Выполненые</Button>
             <Button onClick={() => setFilter("uncompleted")}>Невыполненные</Button>
           </ButtonGroup>
         </Grid>
-        <Grid xs="auto">
+        <Grid item xs="auto">
           <ButtonGroup variant="outlined" aria-label="outlined button group">
             <Button
               onClick={() => {
