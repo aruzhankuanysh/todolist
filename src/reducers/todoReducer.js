@@ -11,15 +11,21 @@ export const todoReducer = (state = initialState, action) => {
         todos: action.payload
       };
     case "ADD_TODO":
+      const newTodo = {
+        ...action.payload,
+        createdAt: new Date(), // Добавляем текущую дату и время
+      };
       return {
         ...state,
-        todos: [...state.todos, action.payload], 
+        todos: [...state.todos, newTodo],
       };
     case "EDIT_TODO":
       return {
         ...state,
         todos: state.todos.map((todo) =>
-          todo.id === action.payload.id ? action.payload : todo
+          todo.id === action.payload.id
+            ? { ...action.payload, createdAt: todo.createdAt } // Сохраняем старую дату создания
+            : todo
         ),
       };
     case "REMOVE_TODO":

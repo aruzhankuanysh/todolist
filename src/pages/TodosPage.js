@@ -1,5 +1,5 @@
 //TodosPage
-import React, { useEffect, useState } from "react";
+import React from "react";
 import TodoForm from "../components/todos/TodoForm";
 import TodoList from "../components/todos/TodoList";
 import { Container } from "@mui/material";

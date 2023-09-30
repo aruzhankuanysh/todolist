@@ -1,4 +1,5 @@
 .todo{
+    position: relative;
     display: flex;
     justify-content: space-between;
     margin: 10px 0;
@@ -9,4 +10,15 @@
 }
 .completed{
     background-color: rgba(0, 255, 21, 0.199);
+}
+.todo_date{
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.todo_date h6{
+    margin: 0 8px;
+}
+.todo_buttons{
+    padding-top: 6px;
 }

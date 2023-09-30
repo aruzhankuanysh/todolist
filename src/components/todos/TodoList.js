@@ -8,10 +8,12 @@ import {
   Checkbox,
   FormControlLabel,
   FormGroup,
+  Grid,
   TextField,
 } from "@mui/material";
 import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "@mui/icons-material/Delete";
+import SwapVertIcon from "@mui/icons-material/SwapVert";
 import "./Todo.css";
 
 function TodoList() {
@@ -23,10 +25,35 @@ function TodoList() {
 
   const [filter, setFilter] = useState("all");
 
-  const filtered = todos.filter((todo) => {
-    if (filter === "all") return true;
-    return todo.completed === (filter === "completed");
-  });
+  const [sortBy, setSortBy] = useState("date");
+  const [sortOrder, setSortOrder] = useState("desc");
+
+  const toggleSortOrder = () => {
+    setSortOrder(sortOrder === "desc" ? "asc" : "desc");
+  };
+
+  const sortByCriteria = (a, b) => {
+    if (sortBy === "date") {
+      if (sortOrder === "asc") {
+        return new Date(a.createdAt) - new Date(b.createdAt);
+      } else {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      }
+    } else if (sortBy === "title") {
+      if (sortOrder === "asc") {
+        return a.title.localeCompare(b.title);
+      } else {
+        return b.title.localeCompare(a.title);
+      }
+    }
+  };
+
+  const filtered = todos
+    .filter((todo) => {
+      if (filter === "all") return true;
+      return todo.completed === (filter === "completed");
+    })
+    .sort(sortByCriteria);
 
   const handleEdit = (todo) => {
     setEditingTodo(todo);
@@ -61,11 +88,37 @@ function TodoList() {
 
   return (
     <>
-      <ButtonGroup variant="outlined" aria-label="outlined button group">
-        <Button onClick={ () => setFilter('all')}>все</Button>
-        <Button onClick={ () => setFilter("completed")}>Выполненые</Button>
-        <Button onClick={ () => setFilter("uncompleted")}>Невыполненные</Button>
-      </ButtonGroup>
+      <Grid container direction="row" justifyContent="space-between">
+        <Grid xs={7}>
+          <ButtonGroup variant="outlined" aria-label="outlined button group">
+            <Button onClick={() => setFilter("all")}>все</Button>
+            <Button onClick={() => setFilter("completed")}>Выполненые</Button>
+            <Button onClick={() => setFilter("uncompleted")}>Невыполненные</Button>
+          </ButtonGroup>
+        </Grid>
+        <Grid xs="auto">
+          <ButtonGroup variant="outlined" aria-label="outlined button group">
+            <Button
+              onClick={() => {
+                setSortBy("title");
+                toggleSortOrder();
+              }}
+            >
+              <SwapVertIcon />
+              По названию
+            </Button>
+            <Button
+              onClick={() => {
+                setSortBy("date");
+                toggleSortOrder();
+              }}
+            >
+              <SwapVertIcon />
+              По дате
+            </Button>
+          </ButtonGroup>
+        </Grid>
+      </Grid>
       {filtered.map((todo) => (
         <FormGroup key={todo.id} style={{ flex: todo.flex }}>
           {editingTodo === todo ? (
@@ -94,7 +147,10 @@ function TodoList() {
                 label={todo.title}
                 onChange={(e) => setEditedText(e.target.value)}
               />
-              <div>
+              <div className="todo_buttons">
+                <div className="todo_date">
+                  <h6>Создано: {new Date(todo.createdAt).toLocaleString()}</h6>
+                </div>
                 <Button onClick={() => handleEdit(todo)}>
                   <ModeIcon />
                 </Button>
