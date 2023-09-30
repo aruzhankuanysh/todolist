@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../actions/themeAction";
+import { FormControlLabel, FormGroup, Switch } from "@mui/material";
 
 export default function SettingTheme() {
   const dispatch = useDispatch();
@@ -9,11 +10,21 @@ export default function SettingTheme() {
 
   const handleThemeToggle = () => {
     dispatch(toggleTheme());
+    console.log(isDark)
   };
   return (
-    <label>
-      <input type="checkbox" checked={isDark} onChange={handleThemeToggle} />
-      Dark mode
-    </label>
+    <>
+      <FormGroup>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={isDark}
+              onChange={handleThemeToggle}
+            />
+          }
+          label="Темная тема"
+        />
+      </FormGroup>
+    </>
   );
 }

@@ -1,14 +1,24 @@
 //TodoList
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { editTodo, removeTodo, toggleTodo } from '../../actions/todoActions';
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { editTodo, removeTodo, toggleTodo } from "../../actions/todoActions";
+import {
+  Button,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  TextField,
+} from "@mui/material";
+import ModeIcon from "@mui/icons-material/Mode";
+import DeleteIcon from "@mui/icons-material/Delete";
+import "./Todo.css";
 
 function TodoList() {
   const dispatch = useDispatch();
   const todos = useSelector((state) => state.todoReducer.todos);
-  console.log('todos:', todos);
+  console.log("todos:", todos);
   const [editingTodo, setEditingTodo] = useState(null);
-  const [editedText, setEditedText] = useState('');
+  const [editedText, setEditedText] = useState("");
 
   const handleEdit = (todo) => {
     setEditingTodo(todo);
@@ -16,16 +26,16 @@ function TodoList() {
   };
 
   const handleSaveEdit = () => {
-    if (editedText.trim() !== '') {
+    if (editedText.trim() !== "") {
       dispatch(editTodo({ ...editingTodo, title: editedText }));
       setEditingTodo(null);
-      setEditedText('');
+      setEditedText("");
     }
   };
 
   const handleCancelEdit = () => {
     setEditingTodo(null);
-    setEditedText('');
+    setEditedText("");
   };
 
   const handleDelete = (todoId) => {
@@ -34,7 +44,7 @@ function TodoList() {
 
   const handleToggle = (todoId) => {
     dispatch(toggleTodo(todoId));
-    console.log('togg')
+    console.log("togg");
   };
 
   if (todos === undefined) {
@@ -42,9 +52,48 @@ function TodoList() {
   }
 
   return (
-    <div>
-      <h1>Список задач</h1>
-      <ul>
+    <>
+      {todos.map((todo) => (
+        <FormGroup flex key={todo.id}>
+          {editingTodo === todo ? (
+            <div className="todo">
+              <TextField
+                variant="standard"
+                type="text"
+                value={editedText}
+                onChange={(e) => setEditedText(e.target.value)}
+              />
+              <div>
+                <Button onClick={handleSaveEdit}>Сохранить</Button>
+                <Button onClick={handleCancelEdit}>Отмена</Button>
+              </div>
+            </div>
+          ) : (
+            <div className={`${todo.completed ? "completed" : ""} todo`}>
+              <FormControlLabel
+                
+                control={
+                  <Checkbox
+                    onClick={() => handleToggle(todo.id)}
+                    checked={todo.completed}
+                  />
+                }
+                label={todo.title}
+                onChange={(e) => setEditedText(e.target.value)}
+              />
+              <div>
+                <Button onClick={() => handleEdit(todo)}>
+                  <ModeIcon />
+                </Button>
+                <Button onClick={() => handleDelete(todo.id)}>
+                  <DeleteIcon />
+                </Button>
+              </div>
+            </div>
+          )}
+        </FormGroup>
+      ))}
+      {/* <ul>
         {todos.map((todo) => (
           <li key={todo.id}>
             {editingTodo === todo ? (
@@ -60,7 +109,7 @@ function TodoList() {
             ) : (
               <>
                 <span
-                  className={todo.completed ? 'completed' : ''}
+                  className={todo.completed ? "completed" : ""}
                   onClick={() => handleToggle(todo.id)}
                 >
                   {todo.title}
@@ -71,10 +120,9 @@ function TodoList() {
             )}
           </li>
         ))}
-      </ul>
-    </div>
+      </ul> */}
+    </>
   );
 }
 
 export default TodoList;
-

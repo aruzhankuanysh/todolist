@@ -1,11 +1,23 @@
 // TodoForm.js
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { addTodo } from '../../actions/todoActions';
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addTodo } from "../../actions/todoActions";
+import {
+  Button,
+  Divider,
+  FormGroup,
+  IconButton,
+  InputBase,
+  Paper,
+  TextField,
+} from "@mui/material";
+
+import AddIcon from "@mui/icons-material/Add";
 
 function TodoForm() {
   const dispatch = useDispatch();
-  const [todoTitle, setTodoTitle] = useState('');
+  const [todoTitle, setTodoTitle] = useState("");
+  const isDark = useSelector((state) => state.theme.isDark);
 
   const handleAddTodo = (e) => {
     e.preventDefault();
@@ -13,24 +25,36 @@ function TodoForm() {
       id: Date.now(),
       title: todoTitle,
     };
-    console.log('step1')
 
-    dispatch(addTodo(newTodo)); 
-    setTodoTitle('');
+    dispatch(addTodo(newTodo));
+    setTodoTitle("");
   };
 
   return (
-    <form onSubmit={handleAddTodo}>
-      <input
-        type="text"
-        placeholder="Добавить задачу"
-        value={todoTitle}
-        onChange={(e) => setTodoTitle(e.target.value)}
-      />
-      <button type="submit">Добавить</button>
-    </form>
+    <FormGroup onSubmit={handleAddTodo}>
+      <Paper
+        component="form"
+        sx={{ display: "flex", justifyContent:'space-between', alignItems: "center", marginBottom: "20px" }}
+      >
+        <TextField
+          id="outlined-basic"
+          label="Новая задача"
+          variant="outlined"
+          sx={{width:"90%"}}
+          value={todoTitle}
+          onChange={(e) => setTodoTitle(e.target.value)}
+        />
+        <IconButton
+          type="submit"
+          color="primary"
+          sx={{ p: "10px" }}
+          aria-label="directions"
+        >
+          <AddIcon />
+        </IconButton>
+      </Paper>
+    </FormGroup>
   );
 }
 
 export default TodoForm;
-

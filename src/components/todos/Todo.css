@@ -1,0 +1,7 @@
+.todo{
+    display: flex;
+    justify-content: space-between;
+}
+.completed{
+    background-color: chartreuse;
+}
