@@ -1,8 +1,7 @@
 //SettingThemePage
-import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../actions/themeAction";
-import { FormControlLabel, FormGroup, Switch } from "@mui/material";
+import { Container, FormControlLabel, FormGroup, Switch } from "@mui/material";
 
 export default function SettingTheme() {
   const dispatch = useDispatch();
@@ -13,7 +12,8 @@ export default function SettingTheme() {
     console.log(isDark)
   };
   return (
-    <>
+    <Container>
+      <h3>Вы можете включить темную тему</h3>
       <FormGroup>
         <FormControlLabel
           control={
@@ -25,6 +25,6 @@ export default function SettingTheme() {
           label="Темная тема"
         />
       </FormGroup>
-    </>
+    </Container>
   );
 }

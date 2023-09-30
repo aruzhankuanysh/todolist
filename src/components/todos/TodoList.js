@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { editTodo, removeTodo, toggleTodo } from "../../actions/todoActions";
 import {
   Button,
+  ButtonGroup,
   Checkbox,
   FormControlLabel,
   FormGroup,
@@ -19,6 +20,13 @@ function TodoList() {
   console.log("todos:", todos);
   const [editingTodo, setEditingTodo] = useState(null);
   const [editedText, setEditedText] = useState("");
+
+  const [filter, setFilter] = useState("all");
+
+  const filtered = todos.filter((todo) => {
+    if (filter === "all") return true;
+    return todo.completed === (filter === "completed");
+  });
 
   const handleEdit = (todo) => {
     setEditingTodo(todo);
@@ -53,11 +61,17 @@ function TodoList() {
 
   return (
     <>
-      {todos.map((todo) => (
-        <FormGroup flex key={todo.id}>
+      <ButtonGroup variant="outlined" aria-label="outlined button group">
+        <Button onClick={ () => setFilter('all')}>все</Button>
+        <Button onClick={ () => setFilter("completed")}>Выполненые</Button>
+        <Button onClick={ () => setFilter("uncompleted")}>Невыполненные</Button>
+      </ButtonGroup>
+      {filtered.map((todo) => (
+        <FormGroup key={todo.id} style={{ flex: todo.flex }}>
           {editingTodo === todo ? (
             <div className="todo">
               <TextField
+                sx={{ width: "70%" }}
                 variant="standard"
                 type="text"
                 value={editedText}
@@ -71,7 +85,6 @@ function TodoList() {
           ) : (
             <div className={`${todo.completed ? "completed" : ""} todo`}>
               <FormControlLabel
-                
                 control={
                   <Checkbox
                     onClick={() => handleToggle(todo.id)}
@@ -93,34 +106,6 @@ function TodoList() {
           )}
         </FormGroup>
       ))}
-      {/* <ul>
-        {todos.map((todo) => (
-          <li key={todo.id}>
-            {editingTodo === todo ? (
-              <>
-                <input
-                  type="text"
-                  value={editedText}
-                  onChange={(e) => setEditedText(e.target.value)}
-                />
-                <button onClick={handleSaveEdit}>Сохранить</button>
-                <button onClick={handleCancelEdit}>Отмена</button>
-              </>
-            ) : (
-              <>
-                <span
-                  className={todo.completed ? "completed" : ""}
-                  onClick={() => handleToggle(todo.id)}
-                >
-                  {todo.title}
-                </span>
-                <button onClick={() => handleEdit(todo)}>Редактировать</button>
-                <button onClick={() => handleDelete(todo.id)}>Удалить</button>
-              </>
-            )}
-          </li>
-        ))}
-      </ul> */}
     </>
   );
 }

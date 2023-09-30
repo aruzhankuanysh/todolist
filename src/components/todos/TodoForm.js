@@ -1,13 +1,10 @@
 // TodoForm.js
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addTodo } from "../../actions/todoActions";
 import {
-  Button,
-  Divider,
   FormGroup,
   IconButton,
-  InputBase,
   Paper,
   TextField,
 } from "@mui/material";
@@ -17,17 +14,19 @@ import AddIcon from "@mui/icons-material/Add";
 function TodoForm() {
   const dispatch = useDispatch();
   const [todoTitle, setTodoTitle] = useState("");
-  const isDark = useSelector((state) => state.theme.isDark);
 
   const handleAddTodo = (e) => {
     e.preventDefault();
-    const newTodo = {
-      id: Date.now(),
-      title: todoTitle,
-    };
-
-    dispatch(addTodo(newTodo));
-    setTodoTitle("");
+    if(todoTitle){
+      const newTodo = {
+        id: Date.now(),
+        title: todoTitle,
+        completed: false,
+      };
+  
+      dispatch(addTodo(newTodo));
+      setTodoTitle("");
+    }
   };
 
   return (
