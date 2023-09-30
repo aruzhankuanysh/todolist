@@ -1,7 +1,16 @@
+body{
+  margin-top: -16px;
+}
 .darktheme{
+  position: relative;
+  top: 0;
+  min-height: 100vh;
   background-color: rgb(1, 0, 41);
   color: aliceblue;
 }
 .lighttheme{
+  position: relative;
+  top: 0;
+  min-height: 100vh;
   background-color: rgb(244, 246, 248);
 }

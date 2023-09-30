@@ -1,4 +1,4 @@
-// App;
+// App
 import { useSelector } from 'react-redux';
 import './App.css';
 import AppRouter from './components/navigation/AppRouter';

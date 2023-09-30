@@ -1,23 +1,23 @@
 //TodoList
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { editTodo, removeTodo, toggleTodo } from '../../actions/todoActions';
 
 function TodoList() {
   const dispatch = useDispatch();
-  const todos = useSelector((state) => state.todos); // Получение списка задач из Redux-хранилища
-    console.log('1',todos)
-  const [editingTodo, setEditingTodo] = useState(null); // Состояние для отслеживания редактируемой задачи
+  const todos = useSelector((state) => state.todoReducer.todos);
+  console.log('todos:', todos);
+  const [editingTodo, setEditingTodo] = useState(null);
   const [editedText, setEditedText] = useState('');
 
   const handleEdit = (todo) => {
     setEditingTodo(todo);
-    setEditedText(todo.text);
+    setEditedText(todo.title);
   };
 
   const handleSaveEdit = () => {
     if (editedText.trim() !== '') {
-      dispatch(editTodo({ ...editingTodo, text: editedText }));
+      dispatch(editTodo({ ...editingTodo, title: editedText }));
       setEditingTodo(null);
       setEditedText('');
     }
@@ -34,7 +34,12 @@ function TodoList() {
 
   const handleToggle = (todoId) => {
     dispatch(toggleTodo(todoId));
+    console.log('togg')
   };
+
+  if (todos === undefined) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
@@ -58,7 +63,7 @@ function TodoList() {
                   className={todo.completed ? 'completed' : ''}
                   onClick={() => handleToggle(todo.id)}
                 >
-                  {todo.text}
+                  {todo.title}
                 </span>
                 <button onClick={() => handleEdit(todo)}>Редактировать</button>
                 <button onClick={() => handleDelete(todo.id)}>Удалить</button>

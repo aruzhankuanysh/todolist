@@ -7,16 +7,20 @@ function TodoForm() {
   const dispatch = useDispatch();
   const [todoTitle, setTodoTitle] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleAddTodo = (e) => {
     e.preventDefault();
-    if (todoTitle.trim() !== '') {
-      dispatch(addTodo({ text: todoTitle, completed: false }));
-      setTodoTitle('');
-    }
+    const newTodo = {
+      id: Date.now(),
+      title: todoTitle,
+    };
+    console.log('step1')
+
+    dispatch(addTodo(newTodo)); 
+    setTodoTitle('');
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleAddTodo}>
       <input
         type="text"
         placeholder="Добавить задачу"
